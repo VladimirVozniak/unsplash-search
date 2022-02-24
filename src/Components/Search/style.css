@@ -1,0 +1,93 @@
+header {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    width: 100%;
+    background: white;
+    border-bottom: 1px solid grey;
+    z-index: 5;
+}
+
+.search-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.search {
+    padding: 5px 0;
+    margin: 10px auto;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    justify-self: center;
+    outline: none;
+    box-shadow: inset 0 0 4px -2px black;
+    caret-color: rgba(0, 0, 0, 0.35);
+}
+
+.search-btn {
+    width: 177px;
+    padding: 5px 0;
+    margin: 10px auto;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 0 4px -2px black;
+}
+
+.search-btn:hover {
+    background: #e2e2e2;
+}
+
+
+.reset-history {
+    font-size: 0.8em;
+    color: grey;
+    margin: 10px 10px;
+    text-align: right;
+    cursor: pointer;
+}
+
+.history {
+    position: absolute;
+    top: 45px;
+    width: 250px;
+    background: rgba(255, 255, 255, 0.8);
+    margin-top: 10px;
+    border-radius: 10px;
+    z-index: 5;
+}
+
+.history-text {
+    cursor: pointer;
+    margin: 10px 0 5px 15px;
+    padding: 5px 10px 10px;
+    border-bottom: 1px solid gray;
+}
+
+.history-text:nth-last-child(1) {
+    border-bottom: none;
+}
+
+.triggerOn {
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.triggerOff {
+    opacity: 0;
+    z-index: -10;
+}
+
+.MuiAutocomplete-root{
+    margin: 0 auto;
+}

@@ -1,0 +1,91 @@
+.photo-list {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+    z-index: -5;
+}
+
+.photo {
+    height: 100%;
+    padding: 10px;
+    margin: 10px;
+}
+
+.image {
+    width: 100%;
+    min-width: 350px;
+    max-width: 600px;
+    object-fit: contain;
+    min-height: 150px;
+    max-height: 500px;
+}
+
+.like-container {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    background: #c1c1c1;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.like-container:hover {
+    background: #d2d2d2;
+}
+
+.like-icon {
+    width: 25px;
+    height: 25px;
+    background: url('https://cdn-icons-png.flaticon.com/512/833/833300.png') center/contain no-repeat;
+}
+
+.liked {
+    background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') center/contain no-repeat;
+}
+
+.like-counter {
+    margin: 0 0 0 5px;
+}
+
+.popup-auth {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background: white;
+    padding: 10px;
+    border: 2px solid #5d5d5d;
+    border-radius: 10px;
+}
+
+.auth-title {
+    margin-top: 0;
+    text-align: center;
+}
+
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.auth {
+    width: 60px;
+    position: absolute;
+    top: 60px;
+    right: 50px;
+    margin-top: -50px;
+    z-index: 5;
+    padding: 5px 0;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 0 4px -2px black;
+}
+
+.auth-container > input {
+    margin-bottom: 4px;
+}
