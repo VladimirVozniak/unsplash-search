@@ -1,17 +1,20 @@
 import "./style.css"
 import {useDispatch, useSelector} from "react-redux";
-import {changeFocus, closeSearchViaKeyboard, historyChange} from "../../Logic/search";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Autocomplete, Box, Button, createFilterOptions, TextField} from "@mui/material";
 import OAuth2Login from "react-simple-oauth2-login";
 import axios from "axios";
+import {changeFocusOnSearch, changeHistory} from "../../Redux/search";
+import {searchPhotos} from "../../Redux/photos";
+import {setAuth, setLoading} from "../../Redux/shared";
 
 export const Search = () => {
-  const [auth, setAuth] = useState(localStorage.getItem("token") !== "")
+  const isAuth = useSelector(state => state.shared.isAuth)
   const focus = useSelector(state => state.search.focus);
-  const history = JSON.parse(localStorage.getItem("history")) || []
+  const history = useSelector(state => state.search.history);
   const dispatch = useDispatch()
 
+  const [searchValue, setSearchValue] = useState('')
 
   const defaultFilterOptions = createFilterOptions();
 
@@ -20,6 +23,7 @@ export const Search = () => {
   };
 
   const onSuccess = async (code) => {
+    dispatch(setLoading(true))
     const token = await axios.post(process.env.REACT_APP_TOKEN_URL,
       {
         client_id: process.env.REACT_APP_OAUTH_CLIENT_ID,
@@ -29,7 +33,8 @@ export const Search = () => {
         grant_type: process.env.REACT_APP_GRANT_TYPE
       })
     localStorage.setItem("token", token.data.access_token)
-    setAuth(true)
+    dispatch(setAuth(true))
+    dispatch(setLoading(false))
   }
   const onError = response => {
     console.log(response)
@@ -37,12 +42,20 @@ export const Search = () => {
 
   const logout = () => {
     localStorage.setItem("token", "")
-    setAuth(false)
+    dispatch(setAuth(false))
   }
 
-  useEffect(() => {
-    dispatch(closeSearchViaKeyboard())
-  })
+  const handleOnKeyPress = (e) => {
+    if ((e.code === "Enter") && searchValue) {
+      dispatch(changeHistory(searchValue))
+      dispatch(searchPhotos(searchValue))
+    }
+  }
+
+  const handleOnChange = (e, value) => {
+    setSearchValue(value)
+    dispatch(searchPhotos(value))
+  }
 
   return (
     <header className="search-container">
@@ -53,26 +66,28 @@ export const Search = () => {
           options={history}
           filterOptions={filterOptions}
           sx={{marginLeft: "auto", marginRight: 0, width: 300}}
-          onKeyPress={e => dispatch(historyChange(e.code, e.target.value, history))}
+          value={searchValue}
+          onChange={handleOnChange}
+          onKeyPress={handleOnKeyPress}
           renderInput={(params) => <TextField label={"Search image"} {...params} />}
         /> :
         <Box sx={{
           marginLeft: "auto"
         }}>
-          <Button size={"large"} onClick={() => dispatch(changeFocus(true))}>Search</Button>
+          <Button size={"large"} onClick={() => dispatch(changeFocusOnSearch(true))}>Search</Button>
         </Box>
       }
       <Box px={1} sx={{
         marginLeft: "auto",
         marginRight: "16px"
       }}>
-        {!auth ?
+        {!isAuth ?
           <OAuth2Login
             authorizationUrl={process.env.REACT_APP_AUTHORIZATION_URL}
             responseType={process.env.REACT_APP_RESPONSE_CODE}
             clientId={process.env.REACT_APP_OAUTH_CLIENT_ID}
             scope={process.env.REACT_APP_SCOPE}
-            redirectUri={process.env.REACT_APP_REDIRECT_URI}
+            redirectUri={process.env.REACT_APP_REDIRECT_URL}
             onSuccess={onSuccess}
             onFailure={onError}
             render={(props) => <Button {...props} >Login</Button>}

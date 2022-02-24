@@ -8,11 +8,20 @@ const toolkitSlice = createSlice({
     focus: false
   },
   reducers: {
+    initHistory(state) {
+      state.history = JSON.parse(localStorage.getItem("history")) || []
+    },
     changeText(state, action) {
       state.text = action.payload
     },
     changeHistory(state, action) {
-      state.history = [...action.payload]
+      const text = action.payload
+      const historySet = new Set(state.history)
+      historySet.add(text)
+      const unduplicatedHistory = [...historySet]
+      console.log(unduplicatedHistory)
+      localStorage.setItem("history", JSON.stringify(unduplicatedHistory))
+      state.history = unduplicatedHistory
     },
     changeFocusOnSearch(state, action) {
       state.focus = action.payload
@@ -20,5 +29,5 @@ const toolkitSlice = createSlice({
   }
 })
 
-export const {changeText, changeHistory, changeFocusOnSearch} = toolkitSlice.actions
+export const {changeText, changeHistory, changeFocusOnSearch, initHistory} = toolkitSlice.actions
 export default toolkitSlice.reducer
