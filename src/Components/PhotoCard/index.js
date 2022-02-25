@@ -6,9 +6,12 @@ import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import {useDispatch} from "react-redux";
 import {likePhoto} from "../../Redux/photos";
+import {memo, useMemo} from "react";
 
-export default function RecipeReviewCard({photo, isAuthorized}) {
-  const likeIconColor = photo.liked_by_user ? "error" : "";
+function PhotoCard({photo, isAuthorized}) {
+
+  const {liked_by_user, urls, likes} = photo
+  const likeIconColor = useMemo(() => liked_by_user? "error" : "", [liked_by_user]);
   const dispatch= useDispatch()
 
   return (
@@ -16,7 +19,7 @@ export default function RecipeReviewCard({photo, isAuthorized}) {
       <CardMedia
         component="img"
         height="194"
-        image={photo.urls.regular}
+        image={urls.regular}
         alt="Paella dish"
       />
       <CardActions disableSpacing>
@@ -24,10 +27,11 @@ export default function RecipeReviewCard({photo, isAuthorized}) {
           <FavoriteIcon color={likeIconColor}/>
         </IconButton>
         <Chip
-          label={photo.likes}
+          label={likes}
           variant="outlined"
         />
       </CardActions>
     </Card>
   );
 }
+export default memo(PhotoCard)

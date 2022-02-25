@@ -1,5 +1,5 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
-import PhotoService from "../Service/PhotoService";
+import photoService from "../Service/PhotoService";
 import {setLoading} from "./shared";
 
 const toolkitSlice = createSlice({
@@ -25,14 +25,14 @@ export const {addPhotos, updatePhoto} = toolkitSlice.actions
 
 export const searchPhotos = createAsyncThunk('photos/searchPhotos', async (text, {dispatch}) => {
   dispatch(setLoading(true))
-  const photos = await PhotoService.searchPhotos(text)
+  const photos = await photoService.searchPhotos(text)
   dispatch(addPhotos(photos))
   dispatch(setLoading(false))
 })
 
 export const likePhoto = createAsyncThunk('photos/likePhoto', async ({id, isLiked}, {dispatch}) => {
   dispatch(setLoading(true))
-  const response = isLiked? await PhotoService.unLikePhoto(id): await PhotoService.likePhoto(id)
+  const response = isLiked? await photoService.unLikePhoto(id): await photoService.likePhoto(id)
   dispatch(updatePhoto(response.photo))
   dispatch(setLoading(false))
 })

@@ -3,16 +3,15 @@ import {useDispatch, useSelector} from "react-redux";
 import {useState} from "react";
 import {Autocomplete, Box, Button, createFilterOptions, TextField} from "@mui/material";
 import OAuth2Login from "react-simple-oauth2-login";
-import axios from "axios";
+import authService from "../../Service/AuthService"
 import {changeFocusOnSearch, changeHistory} from "../../Redux/search";
 import {searchPhotos} from "../../Redux/photos";
 import {setAuth, setLoading} from "../../Redux/shared";
 
 export const Search = () => {
   const [searchValue, setSearchValue] = useState("")
-  const isAuth = useSelector(state => state.shared.isAuth)
-  const focus = useSelector(state => state.search.focus);
-  const history = useSelector(state => state.search.history);
+  const {isAuth} = useSelector(state => state.shared)
+  const {focus, history} = useSelector(state => state.search);
   const defaultFilterOptions = createFilterOptions();
   const dispatch = useDispatch()
 
@@ -20,31 +19,23 @@ export const Search = () => {
     return defaultFilterOptions(options, state).slice(0, 5);
   };
 
-  const onSuccess = async (code) => {
+  const onSuccess = async (authData) => {
     dispatch(setLoading(true))
-    const token = await axios.post(process.env.REACT_APP_TOKEN_URL,
-      {
-        client_id: process.env.REACT_APP_OAUTH_CLIENT_ID,
-        client_secret: process.env.REACT_APP_OAUTH_CLIENT_SECRET,
-        redirect_uri: process.env.REACT_APP_REDIRECT_URL,
-        code: code.code,
-        grant_type: process.env.REACT_APP_GRANT_TYPE
-      })
-    localStorage.setItem("token", token.data.access_token)
+    await authService.receiveToken(authData.code)
     dispatch(setAuth(true))
     dispatch(setLoading(false))
   }
   const onError = response => {
-    console.log(response)
+    console.error(response)
+    dispatch(setLoading(false))
   }
 
   const logout = () => {
-    localStorage.setItem("token", "")
+    authService.logout()
     dispatch(setAuth(false))
   }
 
   const handleOnKeyPress = (e) => {
-    console.log(e.code,e.target.value)
     if (e.code === "Enter") {
       dispatch(changeHistory(e.target.value))
       dispatch(searchPhotos(e.target.value))
