@@ -2,7 +2,6 @@ import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import PhotoService from "../Service/PhotoService";
 import {setLoading} from "./shared";
 
-
 const toolkitSlice = createSlice({
   name: "photos",
   initialState: {
@@ -23,7 +22,6 @@ const toolkitSlice = createSlice({
 })
 
 export const {addPhotos, updatePhoto} = toolkitSlice.actions
-
 
 export const searchPhotos = createAsyncThunk('photos/searchPhotos', async (text, {dispatch}) => {
   dispatch(setLoading(true))

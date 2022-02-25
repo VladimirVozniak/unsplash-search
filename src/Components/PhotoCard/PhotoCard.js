@@ -11,7 +11,6 @@ export default function RecipeReviewCard({photo, isAuthorized}) {
   const likeIconColor = photo.liked_by_user ? "error" : "";
   const dispatch= useDispatch()
 
-
   return (
     <Card sx={{maxWidth: 345}}>
       <CardMedia

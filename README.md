@@ -6,7 +6,7 @@ After that type ```npm i``` , then ```npm start``` to start up the project, and,
 
 
 # How to build prooject
-To build project ```type npm build```, and, after that, ```build``` folder should apear where all static files are placed.
+To build project type ```npm build```, and, after that, ```build``` folder should apear where all static files are placed.
 
 # ENV keys
 

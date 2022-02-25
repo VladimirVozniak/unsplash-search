@@ -9,14 +9,12 @@ import {searchPhotos} from "../../Redux/photos";
 import {setAuth, setLoading} from "../../Redux/shared";
 
 export const Search = () => {
+  const [searchValue, setSearchValue] = useState("")
   const isAuth = useSelector(state => state.shared.isAuth)
   const focus = useSelector(state => state.search.focus);
   const history = useSelector(state => state.search.history);
-  const dispatch = useDispatch()
-
-  const [searchValue, setSearchValue] = useState('')
-
   const defaultFilterOptions = createFilterOptions();
+  const dispatch = useDispatch()
 
   const filterOptions = (options, state) => {
     return defaultFilterOptions(options, state).slice(0, 5);
@@ -46,9 +44,10 @@ export const Search = () => {
   }
 
   const handleOnKeyPress = (e) => {
-    if ((e.code === "Enter") && searchValue) {
-      dispatch(changeHistory(searchValue))
-      dispatch(searchPhotos(searchValue))
+    console.log(e.code,e.target.value)
+    if (e.code === "Enter") {
+      dispatch(changeHistory(e.target.value))
+      dispatch(searchPhotos(e.target.value))
     }
   }
 
@@ -71,16 +70,11 @@ export const Search = () => {
           onKeyPress={handleOnKeyPress}
           renderInput={(params) => <TextField label={"Search image"} {...params} />}
         /> :
-        <Box sx={{
-          marginLeft: "auto"
-        }}>
+        <Box sx={{marginLeft: "auto"}}>
           <Button size={"large"} onClick={() => dispatch(changeFocusOnSearch(true))}>Search</Button>
         </Box>
       }
-      <Box px={1} sx={{
-        marginLeft: "auto",
-        marginRight: "16px"
-      }}>
+      <Box px={1} sx={{marginLeft: "auto", marginRight: "16px"}}>
         {!isAuth ?
           <OAuth2Login
             authorizationUrl={process.env.REACT_APP_AUTHORIZATION_URL}

@@ -19,7 +19,6 @@ const toolkitSlice = createSlice({
       const historySet = new Set(state.history)
       historySet.add(text)
       const unduplicatedHistory = [...historySet]
-      console.log(unduplicatedHistory)
       localStorage.setItem("history", JSON.stringify(unduplicatedHistory))
       state.history = unduplicatedHistory
     },
